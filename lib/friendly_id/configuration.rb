@@ -17,7 +17,8 @@ module FriendlyId
   #    :sequence_separator => ":",
   #    :reserved_words => ["reserved", "words"],
   #    :scope => :country,
-  #    :cache_column => :my_cache_column_name
+  #    :cache_column => :my_cache_column_name,
+  #    :default_locale => :en
   #    # etc.
   class Configuration
 
@@ -27,7 +28,8 @@ module FriendlyId
       :max_length                  => 255,
       :reserved_words              => ["index", "new"],
       :reserved_message            => 'can not be "%s"',
-      :sequence_separator          => "--"
+      :sequence_separator          => "--",
+      :default_locale              => :en
     }
 
     # Whether to allow friendly_id and/or slugs to be nil. This is not
@@ -75,6 +77,9 @@ module FriendlyId
     # Use slugs for storing the friendly_id string.
     attr_accessor :use_slug
     alias :use_slugs= :use_slug
+
+    # Allows setting the default locale when locale column is present.
+    attr_accessor :locale, :default_locale
 
     def initialize(configured_class, method, options = nil, &block)
       @configured_class = configured_class
@@ -131,20 +136,27 @@ module FriendlyId
       @sequence_separator = string
     end
 
-    # This will be set if FriendlyId's scope feature is used in any model. It is here
-    # to provide a way to avoid invoking costly scope lookup methods when the scoped
-    # slug feature is not being used by any models.
-    def self.scopes_used=(val)
-      @scopes_used = !!val
+    class << self
+      # This will be set if FriendlyId's scope feature is used in any model. It is here
+      # to provide a way to avoid invoking costly scope lookup methods when the scoped
+      # slug feature is not being used by any models.
+      def scopes_used=(val)
+        @scopes_used = !!val
+      end
+
+      # Are scoped slugs being used by any model?
+      # @see Configuration.scoped_used=
+      def scopes_used?
+        @scopes_used
+      end
+
+      # Are localed used by the slugs model?
+      def locales_used?
+        ::Slug.column_names.include?('locale')
+      end
     end
 
-    # Are scoped slugs being used by any model?
-    # @see Configuration.scoped_used=
-    def self.scopes_used?
-      @scopes_used
-    end
-
-    %w[approximate_ascii scope strip_non_ascii use_slug].each do |method|
+    %w[approximate_ascii scope strip_non_ascii use_slug locale].each do |method|
       class_eval(<<-EOM, __FILE__, __LINE__ + 1)
         def #{method}?
           !! #{method}

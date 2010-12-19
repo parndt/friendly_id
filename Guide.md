@@ -401,6 +401,45 @@ You can also use a different name for the column if you choose, via the
 Don't use "slug" or "slugs" because FriendlyId needs those names for its own
 purposes.
 
+## Translating the slug to another language
+
+When translating your application to multiple languages you will sometimes need
+to have objects with slugs in different languages.
+
+### Automatic setup
+
+To enable support for locales, simply add a column named "locale" to the friendly_id model.
+FriendlyId will automatically use this column if it detects it:
+
+    class AddLocaleToSlugs < ActiveRecord::Migration
+      def self.up
+        add_column :slugs, :locale, :string
+        add_index  :slugs, :locale, :unique => false
+      end
+
+      def self.down
+        remove_column :slugs, :locale
+      end
+    end
+
+Then, redo the slugs:
+
+    rake friendly_id:redo_slugs
+
+A few warnings when using this feature:
+
+* *DO NOT* forget to redo the slugs, or else this feature may not work!
+* Slugs with locale [may be incompatible with cached_slugs](#scoped_models_and_cached_slugs) and
+  are might be ignored if your model uses the `:cached_slug option`.
+
+### Setting a default locale
+
+You can also set a default locale to use via the `:default_locale` config option:
+
+    class User < ActiveRecord::Base
+      has_friendly_id :name, :default_locale => :en
+    end
+
 ## Nil slugs and skipping validations
 
 You can choose to allow `nil` friendly_ids via the `:allow_nil` config option:

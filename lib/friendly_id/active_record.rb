@@ -53,6 +53,7 @@ module ActiveRecord
     unless FriendlyId.on_ar3?
       class << self
         VALID_FIND_OPTIONS << :scope
+        VALID_FIND_OPTIONS << :locale
       end
     end
   end

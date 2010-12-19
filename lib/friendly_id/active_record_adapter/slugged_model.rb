@@ -40,7 +40,16 @@ module FriendlyId
 
       # Respond with the slugged value if available.
       def to_param_from_slug
-        slug? ? slug.to_friendly_id : id.to_s
+        unless friendly_id_config.class.locales_used?
+          slug? ? slug.to_friendly_id : id.to_s
+        else
+          locale = (Thread.current[:globalize_locale] || ::I18n.locale).to_s
+          if (locale_slug = slugs.detect{|s| s.locale == locale}).present?
+            locale_slug.to_friendly_id
+          else
+            id.to_s
+          end
+        end
       end
 
       # Build the new slug using the generated friendly id.
@@ -48,6 +57,7 @@ module FriendlyId
         return unless new_slug_needed?
         @slug = slugs.build :name => slug_text.to_s, :scope => friendly_id_config.scope_for(self),
           :sluggable => self
+        @slug.locale = Thread.current[:globalize_locale] || ::I18n.locale if friendly_id_config.class.locales_used?
         @new_friendly_id = @slug.to_friendly_id
       end
 

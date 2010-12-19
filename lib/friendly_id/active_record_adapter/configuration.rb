@@ -45,7 +45,7 @@ module FriendlyId
 
       def scope_for(record)
         return nil unless scope?
-        record.send(scope).nil? ? nil : record.send(scope).to_param 
+        record.send(scope).nil? ? nil : record.send(scope).to_param
       end
 
       def scopes_over?(klass)
