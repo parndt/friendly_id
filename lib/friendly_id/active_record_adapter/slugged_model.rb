@@ -5,7 +5,8 @@ module FriendlyId
       def self.included(base)
         base.class_eval do
           has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
-          has_one :slug, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+          has_one :slug, :order => 'id DESC', :as => :sluggable, :dependent => :destroy,
+                  :conditions => ({:locale => (Thread.current[:globalize_locale] || ::I18n.locale)} if friendly_id_config.class.locales_used?)
           before_save :build_a_slug
           after_save :set_slug_cache
           after_update :update_scope
