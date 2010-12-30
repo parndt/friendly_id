@@ -45,7 +45,7 @@ module FriendlyId
           slug? ? slug.to_friendly_id : id.to_s
         else
           locale = (Thread.current[:globalize_locale] || ::I18n.locale).to_s
-          if (locale_slug = slugs.detect{|s| s.locale == locale}).present?
+          if (locale_slug = slugs.detect{|s| s.locale.to_s == locale}).present?
             locale_slug.to_friendly_id
           else
             id.to_s
