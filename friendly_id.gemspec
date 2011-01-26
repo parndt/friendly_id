@@ -13,10 +13,10 @@ Gem::Specification.new do |s|
     "extras/**/*.*" ]
   s.has_rdoc          = true
   s.homepage          = "http://norman.github.com/friendly_id"
-  s.name              = "friendly_id"
+  s.name              = "friendly_id_globalize3"
   s.platform          = Gem::Platform::RUBY
   s.rubyforge_project = "friendly-id"
-  s.summary           = "A comprehensive slugging and pretty-URL plugin."
+  s.summary           = "A comprehensive slugging and pretty-URL plugin. Fork for globalize3 support."
   s.test_files        = Dir.glob "test/**/*_test.rb"
   s.version           = FriendlyId::Version::STRING
 
