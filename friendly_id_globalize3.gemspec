@@ -1,13 +1,13 @@
 require File.expand_path("../lib/friendly_id/version", __FILE__)
 
 Gem::Specification.new do |s|
-  s.authors           = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua"]
+  s.authors           = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua", "Philip Arndt"]
   s.description       = <<-EOM
     FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins
     for Ruby on Rails. It allows you to create pretty URL's and work with
     human-friendly strings as if they were numeric ids for ActiveRecord models.
   EOM
-  s.email             = ["norman@njclarke.com", "adrian@mugnolo.com", "miloops@gmail.com"]
+  s.email             = ["norman@njclarke.com", "adrian@mugnolo.com", "miloops@gmail.com", "parndt@gmail.com"]
   s.files             = Dir["lib/**/*.rb", "lib/**/*.rake", "*.md", "MIT-LICENSE",
     "Rakefile", "rails/init.rb", "generators/**/*.*", "test/**/*.*",
     "extras/**/*.*", ".gemtest"]
